@@ -66,10 +66,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="detail-info reveal">
                     <h2>${product.name[lang]}</h2>
                     <div class="detail-price">฿${product.price}</div>
+                    
+                    ${product.story && product.story[lang] ? `
+                        <div class="detail-story">${product.story[lang]}</div>
+                    ` : ''}
+
                     <div class="detail-description-label" data-i18n="product_description">${translations.product_description || 'Description'}</div>
                     <p class="detail-description">${product.description[lang]}</p>
+                    
+                    ${product.highlights && product.highlights[lang] && product.highlights[lang].length > 0 ? `
+                        <div class="detail-highlights-label" data-i18n="highlights_label">${translations.highlights_label || 'Highlights'}</div>
+                        <ul class="detail-highlights-list">
+                            ${product.highlights[lang].map(point => `<li>${point}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+
                     <div class="detail-actions">
-                        <button class="cta-button" data-i18n="add_to_cart">${translations.add_to_cart || 'Add to Cart'}</button>
+                        ${product.contact ? `
+                            <div class="detail-contact-box">
+                                <p data-i18n="contact_label">${translations.contact_label || 'Interested in this product?'}</p>
+                                <a href="tel:${product.contact}" class="contact-btn">
+                                    <span>📞</span>
+                                    <span data-i18n="call_now">${translations.call_now || 'Call Sales Representative'}</span>
+                                    <span>: ${product.contact}</span>
+                                </a>
+                            </div>
+                        ` : `
+                            <button class="cta-button" data-i18n="add_to_cart">${translations.add_to_cart || 'Add to Cart'}</button>
+                        `}
                     </div>
                 </div>
             `;
@@ -82,15 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async function init() {
         const savedLang = localStorage.getItem('lang') || 'th';
         await fetchTranslations(savedLang);
-        
+
         const productGrid = document.getElementById('product-grid');
         const featuredGrid = document.getElementById('featured-grid');
         const detailContainer = document.getElementById('product-detail-container');
-        
+
         if (productGrid) {
             fetchAndRenderProducts(savedLang, 'product-grid');
         }
-        
+
         if (featuredGrid) {
             fetchAndRenderProducts(savedLang, 'featured-grid', 3);
         }
@@ -106,19 +130,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('data/products.json');
                 allProducts = await response.json();
             }
-            
+
             let products = [...allProducts];
 
             // Setup sidebar if on products page
             const filterList = document.getElementById('factory-filters');
-            if (filterList && filterList.children.length <= 1) { 
+            if (filterList && filterList.children.length <= 1) {
                 setupSidebarFilters(products, lang);
             }
 
             if (factoryFilter !== 'all') {
                 products = products.filter(p => p.factory_id === factoryFilter);
             }
-            
+
             if (limit) {
                 products = products.slice(0, limit);
             }
@@ -133,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             container.innerHTML = products.map(product => `
                 <a href="product-detail.html?id=${product.id}" class="product-card reveal" style="text-decoration: none; color: inherit;">
-                    <div class="product-img" style="background-image: url('${product.image}')"></div>
+                    <div class="product-img" style="background-image: url('${product.image || 'images/placeholder.png'}')"></div>
                     <div class="product-info">
                         <h3>${product.name[lang]}</h3>
                         <p>${product.description[lang]}</p>
@@ -141,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </a>
             `).join('');
-            
+
             setupScrollReveal();
         } catch (error) {
             console.error('Error loading products:', error);
@@ -153,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!filterList) return;
 
         const factories = [...new Set(products.map(p => p.factory_id))];
-        
+
         // Remove existing dynamic filters (keep the first 'All' item)
         while (filterList.children.length > 1) {
             filterList.removeChild(filterList.lastChild);
@@ -163,15 +187,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const li = document.createElement('li');
             li.className = 'filter-item';
             li.setAttribute('data-factory', factoryId);
-            li.setAttribute('data-i18n', `factory_${factoryId}`);
-            li.innerText = translations[`factory_${factoryId}`] || factoryId;
-            
+
+            // Fix: ensure the key is correctly prefixed
+            const i18nKey = factoryId.startsWith('factory_') ? factoryId : `factory_${factoryId}`;
+            li.setAttribute('data-i18n', i18nKey);
+            li.innerText = translations[i18nKey] || factoryId;
+
             li.addEventListener('click', () => {
                 document.querySelectorAll('.filter-item').forEach(item => item.classList.remove('active'));
                 li.classList.add('active');
                 fetchAndRenderProducts(currentLang, 'product-grid', null, factoryId);
             });
-            
+
             filterList.appendChild(li);
         });
 
@@ -191,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLang = currentLang === 'en' ? 'th' : 'en';
             localStorage.setItem('lang', currentLang);
             await fetchTranslations(currentLang);
-            
+
             const productGrid = document.getElementById('product-grid');
             const featuredGrid = document.getElementById('featured-grid');
             const detailContainer = document.getElementById('product-detail-container');
@@ -229,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             // UI state: Loading
             const originalBtnText = submitBtn.innerText;
             submitBtn.innerText = currentLang === 'th' ? 'กำลังส่ง...' : 'Sending...';
@@ -246,8 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    status.innerText = currentLang === 'th' 
-                        ? 'ขอบคุณ! ข้อความของคุณถูกส่งเรียบร้อยแล้ว' 
+                    status.innerText = currentLang === 'th'
+                        ? 'ขอบคุณ! ข้อความของคุณถูกส่งเรียบร้อยแล้ว'
                         : 'Thanks! Your message has been sent successfully.';
                     status.classList.add('success');
                     contactForm.reset();
@@ -255,8 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Form submission failed');
                 }
             } catch (error) {
-                status.innerText = currentLang === 'th' 
-                    ? 'ขออภัย เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง' 
+                status.innerText = currentLang === 'th'
+                    ? 'ขออภัย เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
                     : 'Oops! There was a problem. Please try again.';
                 status.classList.add('error');
             } finally {
