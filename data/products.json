@@ -1,0 +1,44 @@
+[
+    {
+        "id": "coffee",
+        "factory_id": "roastery",
+        "image": "images/hero-coffee.png",
+        "name": {
+            "th": "กาแฟอาราบิก้าแท้",
+            "en": "Authentic Arabica Coffee"
+        },
+        "description": {
+            "th": "กาแฟอาราบิก้า 100% ปลูกใต้ร่มเงาป่า คัดสรรและคั่วด้วยความพิถีพิถัน",
+            "en": "100% Arabica coffee grown under the forest canopy, meticulously selected and roasted."
+        },
+        "price": "450"
+    },
+    {
+        "id": "macadamia",
+        "factory_id": "macadamia_factory",
+        "image": "images/product-macadamia.png",
+        "name": {
+            "th": "แมคคาเดเมียพรีเมียม",
+            "en": "Premium Macadamia"
+        },
+        "description": {
+            "th": "กรอบ อร่อย เต็มเมล็ด แปรรูปอย่างสะอาดและคงคุณค่าทางอาหาร",
+            "en": "Crunchy, delicious, whole nuts processed cleanly to maintain nutritional value."
+        },
+        "price": "350"
+    },
+    {
+        "id": "textiles",
+        "factory_id": "textile_factory",
+        "image": "images/hero-textiles.png",
+        "name": {
+            "th": "งานหัตถศิลป์ไทย",
+            "en": "Thai Hand-Woven Textiles"
+        },
+        "description": {
+            "th": "ลวดลายอันเป็นเอกลักษณ์ ถักทอด้วยมือจากความรักและความชำนาญของช่างท้องถิ่น",
+            "en": "Unique patterns hand-woven with love and expertise by local artisans."
+        },
+        "price": "1,200"
+    }
+]

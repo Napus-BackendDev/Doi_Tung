@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th" data-lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doi Tung | Product Detail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav style="padding: 1.5rem 10%;">
+        <a href="index.html" class="logo">Doi Tung</a>
+        <ul class="nav-links">
+            <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+            <li><a href="products.html" data-i18n="nav_products">Products</a></li>
+            <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+        </ul>
+        <button id="lang-toggle" class="lang-toggle">EN</button>
+    </nav>
+
+    <div class="back-link-container">
+        <a href="products.html" class="back-link">
+            <span class="back-icon">←</span> <span data-i18n="back_to_products">Back to Products</span>
+        </a>
+    </div>
+
+    <section class="product-detail">
+        <div id="product-detail-container" class="product-detail-grid">
+            <!-- Dynamic Injection -->
+            <div class="detail-skeleton">
+                <div class="skeleton-img"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-price"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Doi Tung. <span data-i18n="footer_rights">All Rights Reserved.</span></p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
