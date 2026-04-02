@@ -57,7 +57,10 @@
             "/images/gallery/(1) เวลเนส ดอยตุง - K.แอ้น/Overhead_flat_lay_202603302031.png",
             "/images/gallery/(1) เวลเนส ดอยตุง - K.แอ้น/Overhead_flat_lay_202603302051 (1).png"
         ],
-        "owner": "K.แอ้น (คุณชนเพ็ญ อยู่ลี้) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.แอ้น (คุณชนเพ็ญ อยู่ลี้) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Anne (Chanpen Yulee) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "wellness"
     },
     {
@@ -118,7 +121,10 @@
             "/images/gallery/รางจืด/Rang_jued_tea_202604011153_8.jpeg",
             "/images/gallery/รางจืด/Urban_smog_versus_202604011153_3.jpeg"
         ],
-        "owner": "K.พัชริน · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.พัชริน · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Phatcharin · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "detox-herb"
     },
     {
@@ -180,7 +186,10 @@
             "/images/gallery/Dragonblood tea/A_high-end_conceptual_202603301156.png",
             "/images/gallery/Dragonblood tea/Red_dragon_pattern_202604011515.jpeg"
         ],
-        "owner": "K.ฐิติยา (นางสาวฐิติยา เดชมลธนญธร) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.ฐิติยา (นางสาวฐิติยา เดชมลธนญธร) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Thitiya (Thitiya Dechmonthananyathon) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "dragon-blood-tea"
     },
     {
@@ -242,7 +251,10 @@
             "/images/gallery/ดอยตุงธัญพืช/LINE_NOTE_260323_11.jpg",
             "/images/gallery/ดอยตุงธัญพืช/Heritage_brand_photograph_202603302123.png"
         ],
-        "owner": "K.โต้ · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.โต้ · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Toe · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "highland-superfoods"
     },
     {
@@ -303,7 +315,10 @@
             "/images/gallery/ชาอัสสัม/Atmospheric_lifestyle_photograph_202603302225 (2).png",
             "/images/gallery/ชาอัสสัม/Close-up_detail_photograph_202603302222 (2).png"
         ],
-        "owner": "K.ดาวิ · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.ดาวิ · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Davi · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "assam-tea"
     },
     {
@@ -364,7 +379,10 @@
             "/images/gallery/กระเจี๊ยบแดง/Roselle_juice_package_202603310910.jpeg",
             "/images/gallery/กระเจี๊ยบแดง/Three_glass_cups_202603310910_7.jpeg"
         ],
-        "owner": "K.นัน (นางสาวนันทิดา นันทบวรเกียรติ) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.นัน (นางสาวนันทิดา นันทบวรเกียรติ) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Nan (Nanthida Nanthabowonkiat) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "roselle"
     },
     {
@@ -426,7 +444,10 @@
             "/images/gallery/โกโก้/Cacao_gift_set_202603311135_4.jpeg",
             "/images/gallery/โกโก้/IMG_2178.JPG_202603311135.jpeg"
         ],
-        "owner": "K.หลง (นายวิทวัส นาแด่) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.หลง (นายวิทวัส นาแด่) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Long (Wittawat Nadae) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "cocoa-hills"
     },
     {
@@ -488,7 +509,10 @@
             "/images/gallery/ผึ้งโพรง/Beekeeper_in_traditional_202603311406_2.jpeg",
             "/images/gallery/ผึ้งโพรง/Tiny_bee_on_202603311406_3.jpeg"
         ],
-        "owner": "K.เจิน (ก้องภพ พรสกุลไพศาล) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.เจิน (ก้องภพ พรสกุลไพศาล) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Jern (Kongphop Phonsakulphaisan) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "wild-honey"
     },
     {
@@ -550,7 +574,10 @@
             "/images/gallery/ขมิ้นชัน/Turmeric_rhizome_cut_202603311637_5.jpeg",
             "/images/gallery/ขมิ้นชัน/Turmeric_ring_and_202603311637_7.jpeg"
         ],
-        "owner": "K.พานา (นายพานา ไกลซิง) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.พานา (นายพานา ไกลซิง) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Pana (Pana Klaising) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "golden-turmeric"
     },
     {
@@ -612,7 +639,10 @@
             "/images/gallery/หน่อไม/Jar_with_fermented_202603311731_3.jpeg",
             "/images/gallery/หน่อไม/Thai_bamboo_shoot_202603311731_2.jpeg"
         ],
-        "owner": "K.ฐากร (นายฐากร เดะธัทนกิจ) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.ฐากร (นายฐากร เดะธัทนกิจ) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Thakorn (Thakorn Dethatnakit) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "bamboo-shoots"
     },
     {
@@ -674,7 +704,10 @@
             "/images/gallery/กระชายดำ/Ginger_roots_and_202604011005_6.jpeg",
             "/images/gallery/กระชายดำ/Healer_s_workspace_with_202604011005_8.jpeg"
         ],
-        "owner": "K.สุนิตา (นางสุนิตา วิมลลัตนลาด) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai",
+        "owner": {
+            "th": "K.สุนิตา (นางสุนิตา วิมลลัตนลาด) · กาดดอยตุง · ดอยตุง แม่ฟ้าหลวง เชียงราย",
+            "en": "K. Sunita (Sunita Wimollattanalad) · Kad Doi Tung · Doi Tung, Mae Fa Luang, Chiang Rai"
+        },
         "slug": "black-ginger"
     }
 ]

@@ -81,9 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="detail-info reveal">
                     ${product.tagline && product.tagline[lang] ? `<div class="detail-badge">${product.tagline[lang]}</div>` : ''}
                     <h2>${product.name[lang]}</h2>
-                    ${product.owner ? `<div class="owner-line">👤 ${product.owner}</div>` : ''}
-                    <div class="detail-price">${product.price || 'Contact for price'}</div>
-                    
+                    ${product.owner ? `<div class="owner-line">👤 ${product.owner[lang]}</div>` : ''}
+                    ${product.price && (product.price.includes('ติดต่อสอบถาม') || product.price.includes('B2B') || product.price.includes('Wholesale') || product.price.includes('ราคาส่ง'))
+                        ? `<button class="detail-view-btn" data-i18n="view_detail">${translations.view_detail || 'View Detail'}</button>`
+                        : `<div class="detail-price">${product.price || 'Contact for price'}</div>`
+                    }
+
                     <div class="detail-description-label" data-i18n="product_description">${translations.product_description || 'Brief Description'}</div>
                     <p class="detail-description">${product.description[lang]}</p>
                     
@@ -146,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbEl.classList.add('active');
         };
         setupScrollReveal();
+        applyTranslations();
     } catch (error) {
             console.error('Error loading product detail:', error);
         }
@@ -211,12 +215,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             container.innerHTML = products.map(product => `
-                <a href="/product-detail?id=${product.slug || product.id}" class="product-card reveal">
+                <a href="/product-detail.html?id=${product.slug || product.id}" class="product-card reveal">
                     <div class="product-img" style="background-image: url('${product.image || '/images/placeholder.png'}')"></div>
                     <div class="product-info">
                         <h3>${product.name[lang]}</h3>
                         <p>${product.description[lang]}</p>
-                        <div class="product-price">฿${product.price}</div>
+                        <div class="product-price">
+                            ${product.price && (product.price.includes('ติดต่อสอบถาม') || product.price.includes('B2B') || product.price.includes('Wholesale') || product.price.includes('ราคาส่ง'))
+                                ? `<span class="detail-view-btn" data-i18n="view_detail">${translations.view_detail || 'View Detail'}</span>`
+                                : `฿${product.price}`
+                            }
+                        </div>
                     </div>
                 </a>
             `).join('');
@@ -267,6 +276,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Hamburger Menu Toggle
+    const hamburgerBtn = document.getElementById('hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
+    // Filter Dropdown Toggle (Mobile/Tablet)
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterList = document.getElementById('factory-filters');
+
+    if (filterToggle && filterList) {
+        filterToggle.addEventListener('click', () => {
+            filterToggle.classList.toggle('active');
+            filterList.classList.toggle('active');
+        });
+
+        // Close dropdown when a filter item is clicked
+        filterList.querySelectorAll('.filter-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Update button text to show selected filter
+                const selectedText = item.textContent.trim();
+                filterToggle.textContent = selectedText + ' ▼';
+
+                filterToggle.classList.remove('active');
+                filterList.classList.remove('active');
+            });
+        });
+    }
+
     // Language Toggle Listener
     if (langToggleBtn) {
         langToggleBtn.addEventListener('click', async () => {
@@ -285,6 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (featuredGrid) fetchAndRenderProducts(currentLang, 'featured-grid', 3);
             if (detailContainer) loadProductDetail(currentLang);
+            if (document.getElementById('farmer-grid')) renderFarmerDirectory(currentLang);
         });
     }
 
@@ -375,15 +427,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             container.innerHTML = producers.map(producer => {
+                // Get owner for current language
+                const ownerStr = producer.owner[lang] || producer.owner['th'];
                 // Split owner line to get the short name (before parenthesis)
-                const shortName = producer.owner.split('(')[0].trim();
+                const shortName = ownerStr.split('(')[0].trim();
                 return `
                     <div class="farmer-card">
                         <div class="farmer-img" style="background-image: url('${producer.image}')"></div>
                         <div class="farmer-info">
                             <h3>${shortName}</h3>
-                            <p class="farmer-owner">${producer.owner}</p>
-                            <p class="farmer-specialty">Specializing in: ${producer.productName}</p>
+                            <p class="farmer-owner">${ownerStr}</p>
+                            <p class="farmer-specialty">${translations.specializing_in || 'Specializing in:'} ${producer.productName}</p>
                             <a href="tel:${producer.contact}" class="farmer-contact-btn">📞 ${producer.contact}</a>
                         </div>
                     </div>

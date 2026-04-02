@@ -12,6 +12,11 @@
 <body>
     <nav>
         <a href="/index.html" class="logo">Doi Tung</a>
+        <button id="hamburger" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <ul class="nav-links">
             <li><a href="/index.html" data-i18n="nav_home">Home</a></li>
             <li><a href="/products.html" data-i18n="nav_products">Products</a></li>
@@ -32,7 +37,7 @@
     <section class="farmer-directory-section" style="background: var(--white); padding: 80px 10%;">
         <div class="section-title reveal">
             <h2 data-i18n="farmer_directory_title">Meet Our Producers</h2>
-            <p style="margin-top: 15px; color: var(--text-light);">Direct contact with the artisans and farmers of the Doi Tung community</p>
+            <p style="margin-top: 15px; color: var(--text-light);" data-i18n="farmer_directory_subtitle">Direct contact with the artisans and farmers of the Doi Tung community</p>
         </div>
         <div id="farmer-grid" class="farmer-grid reveal">
             <!-- Dynamically injected from scripts.js -->
