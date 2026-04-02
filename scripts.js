@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             ${product.royal && product.royal[lang] ? `
                 <div class="royal-project-box reveal">
-                    <h3>👑 Kad Doi Tung — Mae Fah Luang Foundation</h3>
+                    <h3>👑 Kad Doi Tung - Mae Fah Luang Foundation</h3>
                     <p>${product.royal[lang]}</p>
                 </div>
             ` : ''}
@@ -145,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
             thumbEl.classList.add('active');
         };
-            setupScrollReveal();
-        } catch (error) {
+        setupScrollReveal();
+    } catch (error) {
             console.error('Error loading product detail:', error);
         }
     }
@@ -170,6 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (detailContainer) {
             loadProductDetail(savedLang);
         }
+
+        const farmerGrid = document.getElementById('farmer-grid');
+        if (farmerGrid) {
+            await renderFarmerDirectory(savedLang);
+        }
+
+        setupScrollReveal();
     }
 
     async function fetchAndRenderProducts(lang, containerId, limit = null, factoryFilter = 'all') {
@@ -342,5 +349,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial Load
+    // --- Farmer Directory ---
+    async function renderFarmerDirectory(lang) {
+        const container = document.getElementById('farmer-grid');
+        if (!container) return;
+
+        try {
+            const response = await fetch('/data/products.json');
+            const products = await response.json();
+
+            // Unique producers by owner name
+            const producers = [];
+            const seenOwners = new Set();
+
+            products.forEach(p => {
+                if (p.owner && !seenOwners.has(p.owner)) {
+                    producers.push({
+                        owner: p.owner,
+                        contact: p.contact,
+                        productName: p.name[lang],
+                        image: p.image
+                    });
+                    seenOwners.add(p.owner);
+                }
+            });
+
+            container.innerHTML = producers.map(producer => {
+                // Split owner line to get the short name (before parenthesis)
+                const shortName = producer.owner.split('(')[0].trim();
+                return `
+                    <div class="farmer-card">
+                        <div class="farmer-img" style="background-image: url('${producer.image}')"></div>
+                        <div class="farmer-info">
+                            <h3>${shortName}</h3>
+                            <p class="farmer-owner">${producer.owner}</p>
+                            <p class="farmer-specialty">Specializing in: ${producer.productName}</p>
+                            <a href="tel:${producer.contact}" class="farmer-contact-btn">📞 ${producer.contact}</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            setupScrollReveal();
+        } catch (error) {
+            console.error('Error loading farmer directory:', error);
+        }
+    }
+
     init();
 });

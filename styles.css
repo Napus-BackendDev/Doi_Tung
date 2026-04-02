@@ -1018,3 +1018,70 @@ footer {
     margin-top: -15px;
     margin-bottom: 5px;
 }
+
+/* --- Farmer Directory --- */
+.farmer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.farmer-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.farmer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.farmer-img {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+}
+
+.farmer-info {
+    padding: 1.5rem;
+}
+
+.farmer-info h3 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.farmer-owner {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.farmer-specialty {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.farmer-contact-btn {
+    display: block;
+    text-align: center;
+    background: var(--primary);
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.farmer-contact-btn:hover {
+    background: var(--secondary);
+}
