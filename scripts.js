@@ -37,36 +37,77 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-lang', currentLang);
     }
 
-    let allProducts = []; // Cache for filtering
+    let allProducts = [];
+
+    async function getProducts() {
+        if (allProducts.length > 0) return allProducts;
+        try {
+            const response = await fetch('/data/products.json');
+            allProducts = await response.json();
+            return allProducts;
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            return [];
+        }
+    }
 
     async function loadProductDetail(lang) {
         const container = document.getElementById('product-detail-container');
         if (!container) return;
 
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = window.PRODUCT_ID || urlParams.get('id');
+
+        // Safety Net Order: 1. URL Parameter, 2. Session Backup, 3. Path Fallback
+        let productId = window.PRODUCT_ID || urlParams.get('id') || sessionStorage.getItem('lastProductId');
+
+        // Fallback: Path-based ID (e.g. /product-detail/wellness)
+        if (!productId) {
+            const pathParts = window.location.pathname.split('/');
+            const lastPart = pathParts[pathParts.length - 1];
+            if (lastPart && lastPart !== 'product-detail' && lastPart !== 'product-detail.html') {
+                productId = lastPart;
+            }
+        }
 
         if (!productId) {
-            console.warn('No product ID found. Redirecting...');
-            // Optional: window.location.href = 'products.html';
+            console.error('CRITICAL: No product ID found in URL. Use product-detail.html?id=slug');
+            container.innerHTML = `<div style="text-align:center; padding:100px;">
+                <h2>Please select a product.</h2>
+                <br><a href="products.html" class="cta-button">Back to Products</a>
+            </div>`;
             return;
         }
 
         try {
-            const response = await fetch('/data/products.json');
-            const products = await response.json();
+            const products = await getProducts();
+            if (!products || products.length === 0) {
+                throw new Error("No products loaded");
+            }
+
             const product = products.find(p => p.id === productId || p.slug === productId);
 
             if (!product) {
-                container.innerHTML = `<h2 style="grid-column: 1/-1; text-align: center; padding: 50px;">Product not found</h2>`;
+                container.innerHTML = `<div style="text-align:center; padding:100px;">
+                    <h2 data-i18n="not_found">Product not found</h2>
+                    <br><a href="products.html" class="cta-button">Back to All Products</a>
+                </div>`;
                 return;
             }
+
+            // Defensive defaults
+            const pName = (product.name && product.name[lang]) || (product.name && product.name['th']) || 'Product';
+            const pDesc = (product.description && product.description[lang]) || '';
+            const pPrice = product.price || '';
+            const pOwner = product.owner || '';
 
             container.innerHTML = `
             <div class="product-detail-grid">
                 <div class="detail-gallery reveal">
                     <div class="gallery-main">
-                        <img src="${product.gallery ? product.gallery[0] : product.image || 'images/placeholder.png'}" id="main-img" alt="${product.name[lang]}">
+                        <img src="${product.gallery ? product.gallery[0] : product.image || 'images/placeholder.png'}" 
+                             id="main-img" 
+                             class="fade-in loaded"
+                             alt="${pName}">
                     </div>
                     ${product.gallery && product.gallery.length > 1 ? `
                         <div class="gallery-thumbnails">
@@ -80,15 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="detail-info reveal">
                     ${product.tagline && product.tagline[lang] ? `<div class="detail-badge">${product.tagline[lang]}</div>` : ''}
-                    <h2>${product.name[lang]}</h2>
-                    ${product.owner ? `<div class="owner-line">👤 ${product.owner[lang]}</div>` : ''}
-                    ${product.price && (product.price.includes('ติดต่อสอบถาม') || product.price.includes('B2B') || product.price.includes('Wholesale') || product.price.includes('ราคาส่ง'))
-                        ? `<button class="detail-view-btn" data-i18n="view_detail">${translations.view_detail || 'View Detail'}</button>`
-                        : `<div class="detail-price">${product.price || 'Contact for price'}</div>`
-                    }
+                    <h2>${pName}</h2>
+                    ${pOwner ? `<div class="owner-line">👤 ${pOwner}</div>` : ''}
+                    ${pPrice && (pPrice.toString().includes('ติดต่อสอบถาม') || pPrice.toString().includes('B2B') || pPrice.toString().includes('Wholesale') || pPrice.toString().includes('ราคาส่ง'))
+                    ? `<button class="detail-view-btn" data-i18n="view_detail">${translations.view_detail || 'View Detail'}</button>`
+                    : `<div class="detail-price">${(pPrice.toString().startsWith('฿') || isNaN(pPrice)) ? pPrice : '฿' + pPrice}</div>`
+                }
 
                     <div class="detail-description-label" data-i18n="product_description">${translations.product_description || 'Brief Description'}</div>
-                    <p class="detail-description">${product.description[lang]}</p>
+                    <p class="detail-description">${pDesc}</p>
                     
                     <div class="detail-actions">
                         ${product.contact ? `
@@ -124,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 ` : ''}
 
-                ${product.highlights && product.highlights[lang] && product.highlights[lang].length > 0 ? `
+                ${product.highlights && product.highlights[lang] && Array.isArray(product.highlights[lang]) ? `
                     <div class="detail-highlights-box reveal">
                         <h3 data-i18n="highlights_label">${translations.highlights_label || 'Highlights'}</h3>
                         <ul class="detail-highlights-list">
@@ -142,55 +183,57 @@ document.addEventListener('DOMContentLoaded', () => {
             ` : ''}
         `;
 
-        // Add gallery function to global scope
-        window.updateGallery = (imgSrc, thumbEl) => {
-            document.getElementById('main-img').src = imgSrc;
-            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-            thumbEl.classList.add('active');
-        };
-        setupScrollReveal();
-        applyTranslations();
-    } catch (error) {
+            window.updateGallery = (imgSrc, thumbEl) => {
+                document.getElementById('main-img').src = imgSrc;
+                document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                thumbEl.classList.add('active');
+            };
+            setupScrollReveal();
+            applyTranslations();
+        } catch (error) {
             console.error('Error loading product detail:', error);
+            container.innerHTML = '<div style="text-align:center; padding:50px;"><h2>Error loading product details. Please try again.</h2></div>';
         }
     }
 
     async function init() {
         const savedLang = localStorage.getItem('lang') || 'th';
+
+        // Ensure translations are ready first
         await fetchTranslations(savedLang);
 
         const productGrid = document.getElementById('product-grid');
         const featuredGrid = document.getElementById('featured-grid');
         const detailContainer = document.getElementById('product-detail-container');
+        const farmerGrid = document.getElementById('farmer-grid');
+
+        // Render all page sections in parallel for speed
+        const loaders = [];
 
         if (productGrid) {
-            fetchAndRenderProducts(savedLang, 'product-grid');
+            loaders.push(fetchAndRenderProducts(savedLang, 'product-grid'));
         }
-
         if (featuredGrid) {
-            fetchAndRenderProducts(savedLang, 'featured-grid', 3);
+            loaders.push(fetchAndRenderProducts(savedLang, 'featured-grid', 3));
         }
-
         if (detailContainer) {
-            loadProductDetail(savedLang);
+            loaders.push(loadProductDetail(savedLang));
         }
-
-        const farmerGrid = document.getElementById('farmer-grid');
         if (farmerGrid) {
-            await renderFarmerDirectory(savedLang);
+            loaders.push(renderFarmerDirectory(savedLang));
         }
 
+        // Wait for ALL content to be injected before finishing
+        await Promise.all(loaders);
+
+        // Finalize reveal effects once everything is in the DOM
         setupScrollReveal();
     }
 
     async function fetchAndRenderProducts(lang, containerId, limit = null, factoryFilter = 'all') {
         try {
-            if (allProducts.length === 0) {
-                const response = await fetch('/data/products.json');
-                allProducts = await response.json();
-            }
-
-            let products = [...allProducts];
+            const productsData = await getProducts();
+            let products = [...productsData];
 
             // Setup sidebar if on products page
             const filterList = document.getElementById('factory-filters');
@@ -214,21 +257,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            container.innerHTML = products.map(product => `
-                <a href="/product-detail.html?id=${product.slug || product.id}" class="product-card reveal">
-                    <div class="product-img" style="background-image: url('${product.image || '/images/placeholder.png'}')"></div>
+            container.innerHTML = products.map(product => {
+                const pid = product.slug || product.id;
+                return `
+                <a href="product-detail?id=${pid}" 
+                   onclick="sessionStorage.setItem('lastProductId', '${pid}')"
+                   class="product-card reveal">
+                    <div class="product-img" style="background-image: url('${product.image || 'images/placeholder.png'}')"></div>
                     <div class="product-info">
                         <h3>${product.name[lang]}</h3>
                         <p>${product.description[lang]}</p>
                         <div class="product-price">
-                            ${product.price && (product.price.includes('ติดต่อสอบถาม') || product.price.includes('B2B') || product.price.includes('Wholesale') || product.price.includes('ราคาส่ง'))
-                                ? `<span class="detail-view-btn" data-i18n="view_detail">${translations.view_detail || 'View Detail'}</span>`
-                                : `฿${product.price}`
-                            }
+                            ${product.price && (product.price.toString().includes('ติดต่อสอบถาม') || product.price.toString().includes('B2B') || product.price.toString().includes('Wholesale') || product.price.toString().includes('ราคาส่ง'))
+                        ? `<span class="detail-view-btn" data-i18n="view_detail">${translations.view_detail || 'View Detail'}</span>`
+                        : `฿${product.price}`
+                    }
                         </div>
                     </div>
                 </a>
-            `).join('');
+            `}).join('');
 
             setupScrollReveal();
         } catch (error) {
@@ -427,13 +474,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             container.innerHTML = producers.map(producer => {
-                // Get owner for current language
-                const ownerStr = producer.owner[lang] || producer.owner['th'];
+                // Fix: product.owner is a string, not an object
+                const ownerStr = producer.owner;
                 // Split owner line to get the short name (before parenthesis)
                 const shortName = ownerStr.split('(')[0].trim();
                 return `
-                    <div class="farmer-card">
-                        <div class="farmer-img" style="background-image: url('${producer.image}')"></div>
+                    <div class="farmer-card reveal">
+                        <div class="farmer-img-container">
+                             <img src="${producer.image}" 
+                                  class="fade-in loaded" 
+                                  alt="${ownerStr}">
+                        </div>
                         <div class="farmer-info">
                             <h3>${shortName}</h3>
                             <p class="farmer-owner">${ownerStr}</p>
