@@ -454,24 +454,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
 
         try {
-            const response = await fetch('/data/products.json');
-            const products = await response.json();
+            const products = await getProducts();
+            if (!products || products.length === 0) {
+                console.warn('No products found for farmer directory.');
+                return;
+            }
 
             // Unique producers by owner name
             const producers = [];
             const seenOwners = new Set();
 
             products.forEach(p => {
-                if (p.owner && !seenOwners.has(p.owner)) {
+                // Defensive: handle both string owner and object owner
+                let ownerName = '';
+                if (typeof p.owner === 'string') {
+                    ownerName = p.owner;
+                } else if (p.owner && typeof p.owner === 'object') {
+                    ownerName = p.owner[lang] || p.owner['th'] || '';
+                }
+
+                if (ownerName && !seenOwners.has(ownerName)) {
                     producers.push({
-                        owner: p.owner,
-                        contact: p.contact,
-                        productName: p.name[lang],
-                        image: p.image
+                        owner: ownerName,
+                        contact: p.contact || '',
+                        productName: (p.name && p.name[lang]) || (p.name && p.name['th']) || '',
+                        image: p.image || 'images/placeholder.png'
                     });
-                    seenOwners.add(p.owner);
+                    seenOwners.add(ownerName);
                 }
             });
+
+            if (producers.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding:50px; color:var(--text-light);">No producer information available at this time.</p>`;
+                return;
+            }
 
             container.innerHTML = producers.map(producer => {
                 // Fix: product.owner is a string, not an object

@@ -536,9 +536,11 @@ section {
 }
 
 .product-img {
-  height: 250px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background-size: cover;
   background-position: center;
+  background-color: #f8f8f8;
 }
 
 .product-info {
@@ -1098,8 +1100,33 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .product-detail {
+        padding: 6rem 5% 3rem;
+    }
+    .product-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .detail-gallery {
+        max-width: 100%;
+    }
+    .gallery-main {
+        border-radius: 15px;
+    }
+    .detail-info h2 {
+        font-size: 1.8rem;
+    }
+    .detail-price {
+        font-size: 1.5rem;
+    }
     .detail-extended-grid {
         grid-template-columns: 1fr;
+    }
+    .detail-story-section {
+        padding: 1.5rem;
+    }
+    .detail-about-box, .detail-highlights-box {
+        padding: 1.5rem;
     }
 }
 
@@ -1191,8 +1218,28 @@ footer {
     box-shadow: var(--shadow-md);
 }
 
+.farmer-img-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.farmer-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.farmer-card:hover .farmer-img-container img {
+    transform: scale(1.1);
+}
+
 .farmer-img {
-    height: 180px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     background-size: cover;
     background-position: center;
 }
