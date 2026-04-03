@@ -59,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Safety Net Order: 1. URL Parameter, 2. Session Backup, 3. Path Fallback
         let productId = window.PRODUCT_ID || urlParams.get('id') || sessionStorage.getItem('lastProductId');
+        
+        // Ensure detail page is scrolled to top on load
+        window.scrollTo(0, 0);
 
         // Fallback: Path-based ID (e.g. /product-detail/wellness)
         if (!productId) {
@@ -94,11 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Defensive defaults
+            // Defensive defaults - handle both string and object formats
             const pName = (product.name && product.name[lang]) || (product.name && product.name['th']) || 'Product';
             const pDesc = (product.description && product.description[lang]) || '';
             const pPrice = product.price || '';
-            const pOwner = product.owner || '';
+            
+            let pOwner = '';
+            if (typeof product.owner === 'string') {
+                pOwner = product.owner;
+            } else if (product.owner && typeof product.owner === 'object') {
+                pOwner = product.owner[lang] || product.owner['th'] || '';
+            }
 
             container.innerHTML = `
             <div class="product-detail-grid">

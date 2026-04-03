@@ -16,11 +16,24 @@
   --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
+html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   font-family: 'Inter', 'Prompt', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 body {
@@ -28,6 +41,13 @@ body {
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Typography Enhancements */
@@ -47,7 +67,8 @@ nav {
   position: fixed;
   top: 0;
   width: 100%;
-  padding: 1.5rem 10%;
+  left: 0;
+  padding: 1.5rem 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -762,7 +783,17 @@ footer {
 
 /* Product Detail Page */
 .back-link-container {
-  padding: 120px 10% 20px;
+  padding: 120px 5% 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-detail {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 5% 60px;
 }
 
 .back-link {
@@ -980,13 +1011,16 @@ footer {
   100% { background-position: -200% 0; }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1100px) {
+  nav {
+    padding: 1rem 3%;
+  }
+  .product-detail {
+    padding: 20px 3% 40px;
+  }
   .product-detail-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .detail-info h2 {
-    font-size: 2.2rem;
+    gap: 30px;
   }
 }
 
@@ -1101,32 +1135,43 @@ footer {
 
 @media (max-width: 768px) {
     .product-detail {
-        padding: 6rem 5% 3rem;
+        padding: 5rem 1rem 2rem;
     }
     .product-detail-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
-    .detail-gallery {
-        max-width: 100%;
+    .detail-info {
+        text-align: left;
+        padding-top: 1rem;
     }
-    .gallery-main {
-        border-radius: 15px;
+    .detail-badge {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
     }
     .detail-info h2 {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+    }
+    .owner-line {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
     }
     .detail-price {
-        font-size: 1.5rem;
+        font-size: 2rem;
+        margin: 1rem 0 2rem;
+    }
+    .detail-description {
+        font-size: 1.05rem;
+        line-height: 1.8;
     }
     .detail-extended-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     .detail-story-section {
         padding: 1.5rem;
-    }
-    .detail-about-box, .detail-highlights-box {
-        padding: 1.5rem;
+        border-left-width: 5px;
     }
 }
 
